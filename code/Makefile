@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Wall -lwiringPi
-TARGET = blink
+TARGET = servo
 
 $(TARGET): $(TARGET).c
 	gcc -o $@ $^ $(CFLAGS)
