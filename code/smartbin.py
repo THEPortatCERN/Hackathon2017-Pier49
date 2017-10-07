@@ -14,6 +14,7 @@ import io, os, sys, time
 from google.cloud import vision
 from google.cloud.vision import types
 import automationhat
+import requests, json
 
 class iocontrol:
     def __init__(self):
@@ -54,14 +55,40 @@ class googlevisionapi:
         return labels
     
 def takepicture(dev, fn):
-    retn = os.system('/usr/bin/fswebcam -qd '+dev+' '+fn)
+    retn = os.system('/usr/bin/fswebcam --no-banner -r 1280x720 -qd '+dev+' '+fn)
     if not retn==0:
         print("error making webcam picture, exiting..")
         os.exit(1)
-                    
+
+def ohf_post(trans, payload):
+    """
+    one happy family server POST requests
+    see https://github.com/mrcage/ohf-community
+    """
+    url = 'https://app-test.ohf-lesvos.org/api/recyclingPoints/'+trans
+    headers = {'Accept':'application/json', 'Content-Type': 'application/json', 'User-Agent': 'raspbi-bin'}
+    r=0
+    if trans=='register' or trans=='getToken' or trans=='addPoints':
+        r = requests.post(url, data=json.dumps(payload), headers=headers)
+    return r
+
+def ohf_test():
+    f = open('api_key.txt', 'r')
+    apikey = f.read()
+
+    payload = {"name": "deadbeef", "family_name": "Muster","case_no": "123456789012345", "password": "abcdef123"}
+    r = ohf_post('register',payload);
+    print(r.text)
+    payload = {"case_no": "123456789012345", "password": "abcdef123"}
+    r = ohf_post('getToken', payload);
+    print(r.text)
+    payload = {"api_key": apikey, "nonce": r.json()['nonce'], "value":666}
+    r = ohf_post('addPoints', payload);
+    print(r.text)
+    
 if __name__ == '__main__':
     gv = googlevisionapi()
-    gvfilter = {'bottle' : 80.0, 'plastic bottle' : 65.0}
+    gvfilter = {'bottle' : 80.0, 'plastic' : 60.0}
     tests = {}
     
     # The name of the image file to annotate
@@ -86,9 +113,10 @@ if __name__ == '__main__':
     io = iocontrol();
     if len(gvfilter)==len(tests) and all(v=='pass' for v in tests.values()):
         print('\n test passed')
-        io.move_hatch(1,'open')
     else:
         print('\n test failed')
+        sys.exit(0)
 
-    sys.exit(0)
-
+    # here in case test has passed
+    io.move_hatch(1,'open')
+    ohf_test()

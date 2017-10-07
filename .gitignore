@@ -2,3 +2,6 @@
 */bin/*
 code/service_account_google-cloud.json
 **/*.jpg
+**/*.png
+code/api_key.txt
+**/__pycache__

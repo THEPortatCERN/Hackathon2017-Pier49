@@ -16,4 +16,5 @@ Note: the Google Vision API authentican file (.json) is not included in this rep
 You need fswebcam for taking webcam pictures:
 $ sudo apt-get install fswebcam
 
+For communication with the One Happy Family server, an API-KEY is needed and stored in ./api_key.txt; this file is not included in the repo and should be manually created
 
