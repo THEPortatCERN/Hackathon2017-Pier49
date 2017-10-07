@@ -11,10 +11,29 @@ functionality:
 """
 
 import io, os, sys, time
-# Imports the Google Cloud client library
 from google.cloud import vision
 from google.cloud.vision import types
+import automationhat
 
+class iocontrol:
+    def __init__(self):
+        # we need power first, even if outputs are controlled by c
+        if automationhat.is_automation_hat():
+            automationhat.light.power.write(1)
+            
+    def move_hatch(self, hatchn=1, dirn='open'):
+        """
+        hatchn - hatchnumber 1 or 2
+        dirn - direction open, close
+        """
+        openhatch = './servo 1300 5'
+        closehatch = './servo 1600 5'
+        if dirn=='open':
+            os.system(openhatch)
+        else:
+            os.system(closehatch)
+        time.sleep(1)
+        
 class googlevisionapi:
     def __init__(self):
         # Instantiates a client
@@ -64,8 +83,10 @@ if __name__ == '__main__':
                 print('_FAIL')
                 tests[label.description] = 'fail'
 
+    io = iocontrol();
     if len(gvfilter)==len(tests) and all(v=='pass' for v in tests.values()):
         print('\n test passed')
+        io.move_hatch(1,'open')
     else:
         print('\n test failed')
 

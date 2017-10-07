@@ -1,0 +1,5 @@
+
+Requirements:
+
+pyqrcode
+python-qrtools
