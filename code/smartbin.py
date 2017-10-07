@@ -10,7 +10,7 @@ functionality:
 4/ provide a reward by printing a voucher or sending (bluetooth) a virtual incentive 
 """
 
-import io, os, sys
+import io, os, sys, time
 # Imports the Google Cloud client library
 from google.cloud import vision
 from google.cloud.vision import types
@@ -33,16 +33,24 @@ class googlevisionapi:
         response = self.visionc.label_detection(image=image)
         labels = response.label_annotations
         return labels
-
+    
+def takepicture(dev, fn):
+    retn = os.system('/usr/bin/fswebcam -qd '+dev+' '+fn)
+    if not retn==0:
+        print("error making webcam picture, exiting..")
+        os.exit(1)
+                    
 if __name__ == '__main__':
     gv = googlevisionapi()
-    gvfilter = {'bottle' : 90.0, 'plastic bottle' : 75.0}
+    gvfilter = {'bottle' : 80.0, 'plastic bottle' : 65.0}
     tests = {}
     
     # The name of the image file to annotate
     picdir = os.path.abspath(os.path.join(os.path.dirname(__file__),"../photos/"))
-    fn = picdir + '/photo2.jpg'
-
+    fn = picdir + '/webcam'+time.strftime("%Y%m%d-%H%M%S")+'.jpg'
+    print("taking picture..")
+    takepicture('/dev/video0',fn)
+                    
     labels = gv.get_labels(fn)
     print('Labels:')
     for label in labels:
