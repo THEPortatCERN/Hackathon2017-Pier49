@@ -1,0 +1,3 @@
+[submodule "qreader"]
+	path = ext/qreader
+	url = https://github.com/ewino/qreader.git
