@@ -26,17 +26,27 @@ class iocontrol:
             
     def move_hatch(self, hatchn=1, dirn='open'):
         """
-        hatchn - hatchnumber 1 or 2
+        hatchn - hatchnumber 1 (plastic), 2 (waste)
         dirn - direction open, close
         """
-        openhatch = './servo 1300 5 '+hatchn
-        closehatch = './servo 1600 5 '+hatchn
+        openhatch = './servo 1800 50 '+str(hatchn)
+        closehatch = './servo 1300 50 '+str(hatchn)
         if dirn=='open':
             os.system(openhatch)
         else:
             os.system(closehatch)
         time.sleep(1)
 
+    def close_hatches(self):
+        self.move_hatch(1, 'close')
+        self.move_hatch(2, 'close')
+
+    def door_closed(self):
+        """
+        when one closes the door, we have momentarily the NC switch open
+        """
+        return (automationhat.input.two.read()==0)
+    
     def detect_motion(self):
         return automationhat.input.one.read()
 
@@ -50,7 +60,7 @@ class iocontrol:
             if prevm==0 and nowm==1:
                 print('motion detected!')
                 musicdir = os.path.abspath(os.path.join(os.path.dirname(__file__),"../mp3/"))
-                mp3 = musicdir+'/example.mp3';
+                mp3 = musicdir+'/TrashWeCan.mp3';
                 os.system('/usr/bin/omxplayer -o local '+mp3)
                 time.sleep(0.1)
             prevm = nowm
@@ -68,6 +78,7 @@ class googlevisionapi:
 
         image = types.Image(content=content)
 
+        
         # Performs label detection on the image file
         print("uploading image for label detection...")
         response = self.visionc.label_detection(image=image)
@@ -113,41 +124,47 @@ def ohf_test():
     print(r.text)
     
 if __name__ == '__main__':
-    print("starting motiondetection.py in background..")
-    subprocess.Popen(["./motiondetection.py"])
-    
+    #print("starting motiondetection.py in background..")
+    # todo - doesn't get killed when main process exits!
+    # subprocess.Popen(["./motiondetection.py"])
+
+    ioc = iocontrol()
     gv = googlevisionapi()
-    gvfilter = {'bottle' : 80.0, 'plastic' : 60.0}
+    gvfilter = {'bottle' : 60.0, 'plastic' : 60.0}
     tests = {}
-    
-    # The name of the image file to annotate
-    picdir = os.path.abspath(os.path.join(os.path.dirname(__file__),"../photos/"))
-    fn = picdir + '/webcam'+time.strftime("%Y%m%d-%H%M%S")+'.jpg'
-    print("taking picture..")
-    takepicture('/dev/video0',fn)
-                    
-    labels = gv.get_labels(fn)
-    print('Labels:')
-    for label in labels:
-        print("label %s with %.1f accuracy" % (label.description, label.score*100))
-        # test if label exist in filter dict
-        if label.description in gvfilter:
-            if label.score*100>gvfilter[label.description]:
-                print('_PASS')
-                tests[label.description] = 'pass'
-            else:
-                print('_FAIL')
-                tests[label.description] = 'fail'
 
-    io = iocontrol();
-    if len(gvfilter)==len(tests) and all(v=='pass' for v in tests.values()):
-        print('\n test passed')
-    else:
-        print('\n test failed')
-        while True:
-            time.sleep(1)
-        sys.exit(0)
+    # forever loop for bottle detection
+    while True:
+        ioc.close_hatches()
+        print("waiting for a closed bottle door...")
+        while not(ioc.door_closed()):
+            time.sleep(0.3)
 
-    # here in case test has passed
-    io.move_hatch(1,'open')
-    ohf_test()
+        # The name of the image file to annotate
+        picdir = os.path.abspath(os.path.join(os.path.dirname(__file__),"../photos/"))
+        fn = picdir + '/webcam'+time.strftime("%Y%m%d-%H%M%S")+'.jpg'
+        print("taking picture..")
+        takepicture('/dev/video0',fn)
+
+        labels = gv.get_labels(fn)
+        print('Labels:')
+        for label in labels:
+            print("label %s with %.1f accuracy" % (label.description, label.score*100))
+            # test if label exist in filter dict
+            if label.description in gvfilter:
+                if label.score*100>gvfilter[label.description]:
+                    print('_PASS')
+                    tests[label.description] = 'pass'
+                else:
+                    print('_FAIL')
+                    tests[label.description] = 'fail'
+
+        if len(gvfilter)==len(tests) and all(v=='pass' for v in tests.values()):
+            print('\n test passed')
+            ioc.move_hatch(1,'open')
+            #todo - OHF incentive
+        else:
+            print('\n test failed')
+            ioc.move_hatch(2,'open')                        
+
+sys.exit(0)
