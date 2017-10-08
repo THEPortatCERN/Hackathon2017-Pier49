@@ -9,7 +9,7 @@ based on example https://cloud.google.com/vision/docs/reference/libraries#client
 import io, os, sys, time
 
 def takepicture(dev, fn):
-    retn = os.system('/usr/bin/fswebcam --no-banner -r 1280x720 -qd '+dev+' '+fn)
+    retn = os.system('/usr/bin/fswebcam --no-banner -r 1920x1080 -qd '+dev+' '+fn)
     if not retn==0:
         print("error making webcam picture, exiting..")
         os.exit(1)

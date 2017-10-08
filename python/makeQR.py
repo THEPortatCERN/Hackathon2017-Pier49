@@ -2,4 +2,5 @@
 
 import pyqrcode
 qr = pyqrcode.create("MwXBslzW4yXQRIgJfyZ3PuC7\/7LivLWqPdTVRd5uKuTb\/VRuD+WBjbyoQjuZeUOR")
-qr.png("waste.png", scale=6)
+qr = pyqrcode.create("MwXBslzW4")
+qr.png("waste.png", scale=20)
