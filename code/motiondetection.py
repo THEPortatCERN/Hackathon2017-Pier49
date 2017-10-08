@@ -2,5 +2,5 @@
 from smartbin import iocontrol
 
 if __name__=='__main__':
-    io = iocontrol()
-    io.playonmotion()
+    ioc = iocontrol()
+    ioc.playonmotion()

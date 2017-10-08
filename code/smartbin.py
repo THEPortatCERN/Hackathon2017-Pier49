@@ -126,12 +126,12 @@ def ohf_test():
 if __name__ == '__main__':
     #print("starting motiondetection.py in background..")
     # todo - doesn't get killed when main process exits!
-    # subprocess.Popen(["./motiondetection.py"])
+    #subprocess.Popen(["./motiondetection.py"])
 
     ioc = iocontrol()
     gv = googlevisionapi()
     gvfilter = {'bottle' : 50.0, 'plastic' : 50.0}
-    tests = {}
+    ntests = {}
 
     # forever loop for bottle detection
     while True:
@@ -167,4 +167,3 @@ if __name__ == '__main__':
             print('\n test failed')
             ioc.move_hatch(2,'open')                        
 
-sys.exit(0)
