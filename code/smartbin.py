@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
     ioc = iocontrol()
     gv = googlevisionapi()
-    gvfilter = {'bottle' : 60.0, 'plastic' : 60.0}
+    gvfilter = {'bottle' : 50.0, 'plastic' : 50.0}
     tests = {}
 
     # forever loop for bottle detection
