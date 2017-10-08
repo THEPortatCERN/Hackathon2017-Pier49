@@ -1,0 +1,217 @@
+body 
+{
+  font-family:		Arial;
+  font-size:		32px;
+  background-color:	white;
+}
+
+#header 
+{
+  font-size: 32px;
+  font-weight:  bold;
+  background-color:  blue;
+  color:white;
+}
+
+#content
+{
+  height:  500px;
+  width: 100%;
+}
+
+#footer
+{
+  font-size: 32px;
+  font-weight:  bold;
+  background-color:  blue;
+}
+
+
+#balance 
+{
+  font-size: 100px;
+  font-weight: bold;
+  line-height: 100px;
+  width:  100%;
+  text-align:center;
+}
+
+div.button
+{
+  font-size: 48px;
+  line-height:  100px;
+  float:left;
+  width:250px;
+  height:100px;
+  background-color: #3e3e3e;
+  color:  white;
+  margin-left:20px;
+  margin-right:20px;
+  text-align:center;
+}
+
+div.button a
+{
+ color:  white;
+ text-decoration: none;
+}
+
+div.keypad 
+{
+  border:  1px solid black
+}
+
+div.key
+{
+  font-size:  42px;
+  font-weight:  bold;
+  border:  3px solid black;
+  height: 60px;
+  width: 60px;
+  line-height:  60px;
+  text-align: center;
+  float:left;
+}   
+
+
+div.row
+{
+ 
+}
+
+
+div.cabinet 
+{
+  width:		100%;
+  text-align:		center;
+  padding-top:		20px;
+  padding-bottom:	20px;
+  height:		22px;
+  line-height:		22px;
+  color:		white;
+  font-weight:		bold;
+  font-size:		20px;
+}
+
+div.section 
+{
+  width:		100%;
+  display:		table;
+  table-layout:		fixed;
+  border:		solid white 1px;
+  background-color:	white;
+  border-bottom-width:	0px;
+  border-top-width:	2px;
+  text-align:		center;
+  vertical-align:	middle;
+}
+
+div.sectionbutton
+{
+  background-color: 	#008dc9;;
+  border-radius:	5px;
+  line-height: 		28px;
+  margin-left: 		auto;
+  margin-right: 	auto;
+  width: 		450px;
+  cursor:		pointer;
+  box-shadow:		5px 5px 5px #888888;
+  /*
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+  */
+}
+
+div.sectionheading.thin {
+  height:		1px;
+}
+
+div.sectionheading 
+{
+  width:		100%;
+  font-size:		18px;
+  font-weight:		bold;
+  padding:		5px;
+}
+
+div.pointer 
+{
+  float:		left;
+  background-color:	white;
+  text-align:		center;
+  height:		30px;
+}
+
+div.selected 
+{
+  background-position:	center center;
+  background-repeat:	no-repeat;
+  background-image:	url("img/cursor.gif");
+}
+
+div.subsectionwrapper 
+{
+  float:		left;
+  background-color:	white;
+  display:		table-cell;
+}
+
+div.subsection.thin {
+  height:		60px;
+}
+
+div.subsection 
+{
+  height:		125px;
+  border-color:		white;
+  border-style:		solid;
+  border-image:		none;
+  border-width:		1px 1px 0;
+  padding:		0 20px;
+  text-align:		center;
+  vertical-align:	middle;
+  position:		relative;
+  color:		white;
+  font-size:		16px;
+  font-weight:		bold;
+  display:		table-cell;
+  width:		inherit;
+  line-height:		20px;
+  cursor:		pointer;
+}
+
+div.caption 
+{
+  color:		#008dc9;
+  text-align:		center;
+  font-size:		16px;
+  font-weight:		bold;
+  width:		100%;
+  line-height:		18px;
+}
+
+div.cabPanel 
+{
+  display:		none;
+  height:		150px;
+  width:		100%;
+  overflow:		hidden;
+}
+
+iframe.ifm_panel 
+{
+  width:		100%;
+  border:		0 none;
+}
+
+img.plus 
+{
+  text-align:		center;
+  position:		absolute;
+  bottom:		0;
+  left:			50%;
+}
+
+span.goblin 
+{
+}
+

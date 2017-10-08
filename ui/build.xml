@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1"?> 
+<project name="TrashWeCanUI" basedir="." default="dist">
+
+  <property name="dist.dir" 
+            value="dist"/>
+
+  <property name="docs.dir" 
+            value="docs"/>
+
+  <property name="webapp_name" 
+            value="ui"/>
+
+  <property name="deploy_host"
+            value="VISITOR-23384330.cern.ch"/>
+
+  <property name="user_name"
+            value="pi"/>
+
+  <property name="password"
+            value="pier49waste"/>
+
+  <property name="deploy_path"
+            value="/var/lib/tomcat8/webapps"/>
+
+  <target name="clean" 
+          description="Deletes all compiled class files">
+    <delete dir="${dist.dir}"/>
+    <delete file="${webapp_name}/WEB-INF/db.db"/>
+    <echo>
+------------------------------------------------------------
+The ${dist.dir} has been deleted.
+------------------------------------------------------------
+    </echo>
+  </target>
+
+  <target name="dist" 
+          description="Create the application war file">
+    <delete dir="${dist.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+    <war destfile="${dist.dir}/${webapp_name}.war" 
+         webxml="${webapp_name}/WEB-INF/web.xml">
+      <fileset dir="${webapp_name}"/>
+    </war>
+    <echo>
+------------------------------------------------------------
+The WAR file ${dist.dir}/${webapp_name}.war is ready.
+------------------------------------------------------------
+    </echo>
+  </target>
+
+
+  <target name="deploy"
+          depends="dist"
+          description="Deploy ${webapp_name} to ${deploy_host}">
+    <exec executable="scp" failonerror="true">
+      <arg value="${dist.dir}/${webapp_name}.war"/>
+      <arg value="${user_name}@${deploy_host}:${deploy_path}/${webapp_name}.war"/>
+    </exec>
+    <echo>
+------------------------------------------------------------
+${webapp_name} deployed to ${deploy_host}.
+------------------------------------------------------------
+    </echo>
+  </target>
+</project>
+
