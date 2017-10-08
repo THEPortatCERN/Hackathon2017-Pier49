@@ -27,13 +27,16 @@ class iocontrol:
         hatchn - hatchnumber 1 or 2
         dirn - direction open, close
         """
-        openhatch = './servo 1300 5'
-        closehatch = './servo 1600 5'
+        openhatch = './servo 1300 5 '+hatchn
+        closehatch = './servo 1600 5 '+hatchn
         if dirn=='open':
             os.system(openhatch)
         else:
             os.system(closehatch)
         time.sleep(1)
+
+    def detect_motion(self):
+        return automationhat.input.one.read()
         
 class googlevisionapi:
     def __init__(self):
@@ -87,6 +90,16 @@ def ohf_test():
     print(r.text)
     
 if __name__ == '__main__':
+    io = iocontrol();
+    prevm = 0
+    while True:
+        if prevm==0 and io.detect_motion()==1:
+            print('motion detected!')
+            musicdir = os.path.abspath(os.path.join(os.path.dirname(__file__),"../mp3/"))
+            mp3 = musicdir+'/example.mp3';
+            os.system('/usr/bin/omxplayer -o local '+mp3)
+        time.sleep(0.1)
+    
     gv = googlevisionapi()
     gvfilter = {'bottle' : 80.0, 'plastic' : 60.0}
     tests = {}
