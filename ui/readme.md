@@ -1,4 +1,5 @@
 SmartBin User Interface
+=======================
 
 Installing the UI
 -----------------
@@ -36,3 +37,19 @@ When you reboot the pi, tomcat8 should start automatically
 
 How it works
 ------------
+
+The script details.sh looks for two files in /tmp: nonce and case_no.  If 
+present, nonce contains the hash code, and case_no contains the currently 
+authenticated user's case number.  details.sh then creates some json content 
+that can be directly loaded by ajax calls in the user interface code to 
+display the user id and all available user parameters.  If the files are
+removed, the UI goes back to showing an unauthenticated screen. 
+This approach was taken for two reasons.  The first is to bypass cross site
+scripting constraints because the server code is running on a different 
+machine that we we cannot modify, so headers that would allow XSite scripting
+to occur could not be set.  The second is to keep the 
+user authentication code independant from the SmartBin user interface in 
+order to keep things simple and easy to change without too much risk of 
+breaking other components.
+
+
